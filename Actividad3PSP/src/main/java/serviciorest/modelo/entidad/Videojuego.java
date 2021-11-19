@@ -12,6 +12,10 @@ public class Videojuego {
 		this.compania = compania;
 	}
 
+	public Videojuego() {
+		super();
+	}
+
 	public int getId() {
 		return id;
 	}
