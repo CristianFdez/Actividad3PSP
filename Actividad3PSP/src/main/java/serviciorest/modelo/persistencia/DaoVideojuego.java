@@ -12,7 +12,7 @@ import serviciorest.modelo.entidad.Videojuego;
 @Component
 public class DaoVideojuego {
 	public List<Videojuego> listaVideojuegos;
-	public int contador = 1;
+	public int contador;
 	
 	public DaoVideojuego() {
 		listaVideojuegos = new ArrayList<Videojuego>();
