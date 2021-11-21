@@ -1,5 +1,8 @@
 package serviciorest.cliente.entidad;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Videojuego {
 	private int id, nota;
 	private String nombre, compania;
@@ -46,6 +49,11 @@ public class Videojuego {
 
 	public void setCompania(String compania) {
 		this.compania = compania;
+	}
+
+	@Override
+	public String toString() {
+		return "Videojuego [ID = " + id  + ", nombre = " + nombre + ", compañia = " + compania + ", nota = " + nota + "]";
 	}
 	
 	

@@ -12,6 +12,9 @@ import org.springframework.web.client.RestTemplate;
 
 import serviciorest.cliente.entidad.Videojuego;
 
+//En esta clase definiremos la URL del servicio REST de videojuegos y
+//los diferentes métodos para poder interactuar con dicho servicio REST
+
 @Service
 public class ServicioProxyVideojuego {
 
@@ -33,8 +36,8 @@ public class ServicioProxyVideojuego {
 			}
 			
 		}catch (HttpClientErrorException e) {
-			System.out.println("obtener -> El videojuego NO se ha encontrado, id: " + id);
-		    System.out.println("obtener -> Codigo de respuesta: " + e.getStatusCode());
+			System.out.println("El videojuego con id " + id + " NO se ha podiddo obtener");
+		    System.out.println("El código de respuesta es " + e.getStatusCode());
 		    return null;
 		}
 	}
@@ -47,8 +50,8 @@ public class ServicioProxyVideojuego {
 			return re.getBody();
 			
 		} catch (HttpClientErrorException e) {
-			System.out.println("alta -> El videojuego NO se ha dado de alta, id: " + v);
-		    System.out.println("alta -> Codigo de respuesta: " + e.getStatusCode());
+			System.out.println("El videojuego NO se ha dado de alta");
+		    System.out.println("El código de respuesta es " + e.getStatusCode());
 		    return null;
 		}
 	}
@@ -59,8 +62,8 @@ public class ServicioProxyVideojuego {
 			return true;
 			
 		} catch (HttpClientErrorException e) {
-			System.out.println("modificar -> El videojuego NO se ha modificado, id: " + v.getId());
-		    System.out.println("modificar -> Codigo de respuesta: " + e.getStatusCode());
+			System.out.println("El videojuego con id " + v.getId() + " NO se ha modificado");
+		    System.out.println("El código de respuesta es " + e.getStatusCode());
 		    return false;
 		}
 	}
@@ -71,27 +74,21 @@ public class ServicioProxyVideojuego {
 			return true;
 			
 		} catch (HttpClientErrorException e) {
-			System.out.println("borrar -> El videojuego NO se ha borrado, id: " + id);
-		    System.out.println("borrar -> Codigo de respuesta: " + e.getStatusCode());
+			System.out.println("El videojuego con id " + id + " NO se ha borrado");
+		    System.out.println("El código de respuesta es " + e.getStatusCode());
 		    return false;
 		}
 	}
 
-	public List<Videojuego> listar(String nombre){
-		String queryParams = "";		
-		if(nombre != null) {
-			queryParams += "?nombre=" + nombre;
-		}
-		
+	public List<Videojuego> listar(){
 		try {
-			ResponseEntity<Videojuego[]> response =
-					  restTemplate.getForEntity(URL + queryParams,Videojuego[].class);
+			ResponseEntity<Videojuego[]> response = restTemplate.getForEntity(URL,Videojuego[].class);
 			Videojuego[] arrayVideojuego = response.getBody();
 			return Arrays.asList(arrayVideojuego);
 			
 		} catch (HttpClientErrorException e) {
-			System.out.println("listar -> Error al obtener la lista de videojuegos");
-		    System.out.println("listar -> Codigo de respuesta: " + e.getStatusCode());
+			System.out.println("Error al obtener la lista de videojuegos");
+			System.out.println("El código de respuesta es " + e.getStatusCode());
 		    return null;
 		}
 	}

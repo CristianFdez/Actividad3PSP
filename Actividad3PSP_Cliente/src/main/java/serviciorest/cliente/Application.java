@@ -1,6 +1,7 @@
 package serviciorest.cliente;
 
 import java.util.List;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import serviciorest.cliente.entidad.Videojuego;
 import serviciorest.cliente.servicio.ServicioProxyMensaje;
 import serviciorest.cliente.servicio.ServicioProxyVideojuego;
+
+//En esta clase definiremos en el método run(), el menú a elegir por el cliente y 
+//la funcionalidad de cada una de las opciones.
 
 @SpringBootApplication
 public class Application implements CommandLineRunner{
@@ -40,70 +44,123 @@ public class Application implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("****** Arrancando el cliente REST ******");
-		System.out.println("*************  MENSAJE *****************");
-		String mensaje = spm.obtener("mensaje");
-		System.out.println("run -> Mensaje: " + mensaje);
 		
-		System.out.println("***********  MENSAJE HTML **************");
-		String mensajeHTML = spm.obtener("mensajeHTML");
-		System.out.println("run -> Mensaje: " + mensajeHTML);
-		
-		System.out.println("*********** ALTA VIDEOJUEGO ***************");
-		Videojuego videojuego = new Videojuego();
-		videojuego.setNombre("Fortnite");
-		videojuego.setCompania("Epic Games");
-		videojuego.setNota(10);
-		
-		Videojuego vAlta = spv.alta(videojuego);
-		System.out.println("run -> Videojuego dado de alta " + vAlta);
-		
-		System.out.println("************ GET VIDEOJUEGO ***************");
-		videojuego = spv.obtener(vAlta.getId());
-		System.out.println("run -> Videojuego con id " + vAlta.getId() + ":" + videojuego);
-		
-		System.out.println("************ GET VIDEOJUEGO ERRÓNEO ***************");
-		videojuego = spv.obtener(20);
-		System.out.println("run -> Videojuego con id 20: " + videojuego);
-		
-		System.out.println("********* MODIFICAR VIDEOJUEGO *************");	
-		Videojuego vModificar = new Videojuego();
-		vModificar.setId(vAlta.getId());
-		vModificar.setNombre("World of Warcraft");
-		vModificar.setCompania("Blizzard");
-		vModificar.setNota(10);
-		boolean modificada = spv.modificar(vModificar);
-		System.out.println("run -> videojuego modificado? " + modificada);
-		
-		System.out.println("********* MODIFICAR VIDEOJUEGO ERRÓNEO*************");			
-		vModificar.setNombre("FIFA");
-		vModificar.setCompania("EA Sports");
-		vModificar.setId(20);
-		vModificar.setNota(6);
-		modificada = spv.modificar(vModificar);
-		System.out.println("run -> videojuego modificado? " + modificada);
-		
-		System.out.println("********** BORRAR VIDEOJUEGO **************");
-		boolean borrada = spv.borrar(vAlta.getId());
-		System.out.println("run -> Videojuego con id " + vAlta.getId() + " borrado?" + borrada);	
-		
-		System.out.println("******** BORRAR VIDEOJUEGO ERRÓNEO *******");
-		borrada = spv.borrar(20);
-		System.out.println("run -> Persona con id 20 borrada? " + borrada);		
-		
-		System.out.println("********** LISTAR VIDEOJUEGOS ***************");
-		List<Videojuego> listaVideojuego = spv.listar(null);
+		try (Scanner sc = new Scanner(System.in)){
+			int opcion;
+			String texto = "";
+			boolean continuar = true;
+			Videojuego videojuego = new Videojuego();
+			
+			do {
+				escribirMenu();
+				opcion = Integer.parseInt(sc.nextLine());
+				
+				switch (opcion) {
+				case 1:
+					System.out.println("************ ALTA VIDEOJUEGO *************");					
+					System.out.println("Introduce el nombre del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setNombre(texto);
+					
+					System.out.println("Introduce la compañia del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setCompania(texto);
+					
+					System.out.println("Introduce la nota del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setNota(Integer.parseInt(texto));	
+					
+					Videojuego vAlta = spv.alta(videojuego);
+					
+					if(vAlta == null) {
+						System.out.println("run -> Videojuego NO dado de alta por que ya existe");
+					}else {
+						System.out.println("run -> Videojuego dado de alta " + vAlta);
+					}					
+					break;
+					
+				case 2:					
+					System.out.println("********** BORRAR VIDEOJUEGO **************");
+					System.out.println("Introduce el id del videojuego:");
+					texto = sc.nextLine();
+					
+					boolean borrada = spv.borrar(Integer.parseInt(texto));
+					System.out.println("run -> Videojuego con id " + Integer.parseInt(texto) + " borrado? " + borrada);					
+					break;
+					
+				case 3:
+					System.out.println("********* MODIFICAR VIDEOJUEGO *************");
+					System.out.println("Introduce el id del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setId(Integer.parseInt(texto));
+					
+					System.out.println("Introduce el nombre del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setNombre(texto);
+					
+					System.out.println("Introduce la compañia del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setCompania(texto);
+					
+					System.out.println("Introduce la nota del videojuego:");
+					texto = sc.nextLine();
+					videojuego.setNota(Integer.parseInt(texto));
+					
+					boolean modificada = spv.modificar(videojuego);
+					System.out.println("run -> videojuego modificado? " + modificada);				
+					break;
+					
+				case 4:
+					System.out.println("************ GET VIDEOJUEGO ***************");
+					System.out.println("Introduce el id del videojuego:");
+					texto = sc.nextLine();
+					videojuego = spv.obtener(Integer.parseInt(texto));
+					
+					if(videojuego != null) {
+						System.out.println("run -> Videojuego con id " + Integer.parseInt(texto) + ":" + videojuego);
+					}								
+					break;
+					
+				case 5:
+					System.out.println("********** LISTAR VIDEOJUEGOS ***************");
+					List<Videojuego> listaVideojuego = spv.listar();
+			
+					listaVideojuego.forEach((v) -> System.out.println(v));
+					break;
+					
+				case 6:
+					System.out.println("******************************************");		
+					System.out.println("******** Parando el cliente REST *********");
+					pararAplicacion();
+					continuar = false;
+					break;
+					
+				default:
+					System.out.println("Opción incorrecta");
+				}
+				
+			}while(continuar);
 
-		listaVideojuego.forEach((v) -> System.out.println(v));
+		} catch (Exception e) {
+			System.err.println("CLIENTE: Error -> " + e);
+			e.printStackTrace();
+		}
 		
-		System.out.println("******* LISTAR VIDEOJUEGOS POR NOMBRE *******");
-		listaVideojuego = spv.listar("World of Warcraft");
-		listaVideojuego.forEach((v) -> System.out.println(v));
-		
-		System.out.println("******************************************");		
-		System.out.println("******** Parando el cliente REST *********");	
-
-		pararAplicacion();
-		
+		System.out.println("CLIENTE: Fin del programa");	
+	}
+	
+	private static void escribirMenu() {
+		System.out.println();
+		System.out.println("Elige la opción deseada:");
+		System.out.println("--------------------------");
+		System.out.println("1 = Dar de alta un videojuego");
+		System.out.println("2 = Dar de baja un videojuego por ID");
+		System.out.println("3 = Modificar un videojuego por ID");
+		System.out.println("4 = Obtener un videojuego por ID");
+		System.out.println("5 = Listar todos los videojuegos");
+		System.out.println("6 = Salir de la aplicación");
+		System.out.println("--------------------------");
+		System.out.println("¿Qué opción eliges?");
 	}
 	
 	public void pararAplicacion() {		
