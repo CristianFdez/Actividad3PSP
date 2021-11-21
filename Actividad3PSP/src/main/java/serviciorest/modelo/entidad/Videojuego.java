@@ -48,5 +48,8 @@ public class Videojuego {
 		this.compania = compania;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Videojuego [ID = " + id  + ", nombre = " + nombre + ", compañia = " + compania + ", nota = " + nota + "]";
+	}
 }

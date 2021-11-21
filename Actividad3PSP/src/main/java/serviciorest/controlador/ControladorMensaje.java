@@ -3,6 +3,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//Los metodos de esta clase, gracias a la anotacion @RestController, nos
+//serviran para recibir peticiones HTTP de nuestros clientes
+
 @RestController
 public class ControladorMensaje {
 
@@ -13,7 +16,7 @@ public class ControladorMensaje {
 	
 	@GetMapping(value = "mensajeHTML", produces = MediaType.TEXT_HTML_VALUE)
 	public String obtenerMensajeHTML() {
-		//Esta clase es muy buena para concatenar Strings
+
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<!DOCTYPE html>");
 		buffer.append("<html>");

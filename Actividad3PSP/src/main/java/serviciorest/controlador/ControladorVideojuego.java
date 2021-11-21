@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import serviciorest.modelo.entidad.Videojuego;
 import serviciorest.modelo.persistencia.DaoVideojuego;
 
+//En esta clase se definen los métodos para realizar un CRUD completo de la entidad Videojuego 
+
 @RestController
 public class ControladorVideojuego {
 

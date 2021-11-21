@@ -6,10 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import serviciorest.modelo.entidad.Videojuego;
 
+//En esta clase tenemos nuestra biblioteca de videojuegos y los métodos que utilizará el cliente
+//para poder interactuar con dicha biblioteca
+
 @Component
 public class DaoVideojuego {
 	public List<Videojuego> listaVideojuegos;
-	public int contador;
+	public int contador = 1;
 	
 	public DaoVideojuego() {
 		listaVideojuegos = new ArrayList<Videojuego>();
@@ -35,16 +38,7 @@ public class DaoVideojuego {
 			return null;
 		}
 	}
-	
-//	public Videojuego get(String nombre) {
-//		try {
-//			return listaVideojuegos.get(id) =;
-//		}catch(IndexOutOfBoundsException iobe) {
-//			System.out.println("Videojuego fuera de rango");
-//			return null;
-//		}
-//	}
-	
+
 	public List<Videojuego> list(){
 		return listaVideojuegos;
 	}
